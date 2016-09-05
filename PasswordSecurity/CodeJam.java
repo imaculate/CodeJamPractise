@@ -38,19 +38,19 @@ public class CodeJam {
    
 
 
-	public static StringBuilder permutation(StringBuilder sb) { 
-			Random rn = new Random();
-			int pos = rn.nextInt(26);
-			int pos2 =  rn.nextInt(26);
-			while(pos2==pos){	
-				pos2 =  rn.nextInt(26);
-			}
-			String one = sb.charAt(pos)+"";	
-			String two = sb.charAt(pos2)+"";
-			sb = sb.replace(pos, pos+1,two );
-			sb = sb.replace(pos2, pos2+1,one );
-			return sb;
-	}
+   public static StringBuilder permutation(StringBuilder sb) { 
+      Random rn = new Random();
+      int pos = rn.nextInt(26);
+      int pos2 =  rn.nextInt(26);
+      while(pos2==pos){	
+         pos2 =  rn.nextInt(26);
+      }
+      String one = sb.charAt(pos)+"";	
+      String two = sb.charAt(pos2)+"";
+      sb = sb.replace(pos, pos+1,two );
+      sb = sb.replace(pos2, pos2+1,one );
+      return sb;
+   }
 
 	
 
@@ -65,41 +65,73 @@ public class CodeJam {
       
       // read in each case  **some cases have more than one line
          for (int i = 0; i < cases; i++){
-			 System.out.println("Case #" + (i + 1));
-			 StringBuilder sb = new StringBuilder("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-			 String s = "";
+            System.out.println("Case #" + (i + 1));
+            StringBuilder sb = new StringBuilder("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+            String s = "";
             int N = Integer.parseInt(br.readLine());
             String[] arr = br.readLine().split(" ");
             boolean impossible = false;
             for(int j = 0; j< N; j++){
-				s = arr[j];
-				if(s.length()==1){
-					sb=new StringBuilder("IMPOSSIBLE");
-					impossible = true;
-					break;
-				}
-				
-			}
-			boolean permute = !impossible;
-		
-			while(permute){
-				permute = false;
-				
-				for(int j = 0; j< N; j++){
-					s = arr[j];
-					if(sb.indexOf(s)>=0){
-						permute = true;
-						break;
-					}	
-					
-				}
-				if(permute)
-					sb = permutation(sb);
-			
-			}
+               s = arr[j];
+               if(s.length()==1){
+                  sb=new StringBuilder("IMPOSSIBLE");
+                  impossible = true;
+                  break;
+               }
+            
+            }
+            
+            boolean goFront = false;
+            boolean goEnd = false;
+            for(int ch = 65; ch<91; ch++){
+               char c = (char)ch;
+               
+               int countEnd = 0;
+               int countFront = 0;
+               for(int j = 0; j< N; j++){
+                  s = arr[j];
+                  if(s.length()==2 && s.charAt(0)==c &&s.charAt(1)!=c ){
+                     countEnd++;
+                  }
+                  if(s.length()==2 && s.charAt(1)==c &&s.charAt(0)!=c ){
+                     countFront++;
+                  }
+               
+               }
+               if((countFront==25 && countEnd == 25)|| (countFront==25 && goFront) || (countEnd==25 && goEnd)){
+                  sb=new StringBuilder("IMPOSSIBLE");
+                  impossible = true;
+                  break;
+                  
+               }else if(countFront==25){
+                  goFront= true;
+               }else if(countEnd==25){
+                  goEnd= true;
+               }
+               
+               
+            }
+         
+            boolean permute = !impossible;
+         
+            while(permute){
+               permute = false;
+            
+               for(int j = 0; j< N; j++){
+                  s = arr[j];
+                  if(sb.indexOf(s)>=0){
+                     permute = true;
+                     break;
+                  }	
+               
+               }
+               if(permute)
+                  sb = permutation(sb);
+            
+            }
             
            
-			StringBuilder res = new StringBuilder();
+            StringBuilder res = new StringBuilder();
             res.append("Case #" + (i + 1) + ": "+sb.toString());
                        
             try {
