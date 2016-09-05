@@ -27,7 +27,7 @@ public class CodeJam {
 
    public static void main(String[] args) throws IOException {
    // inFile and outFile
-      CodeJam cj = new CodeJam("B-large-practice.in", "B-large-practice.out");
+      CodeJam cj = new CodeJam("B-large-practice.in", "B-large-practice-2.out");
    
       cj.solve();
       //cj.output();
@@ -62,6 +62,7 @@ public class CodeJam {
                K+=D;
             //System.out.println(K);
             
+            N = N%D;
             if((N+K)%2==0){
           
                   dr = K+1-N;
