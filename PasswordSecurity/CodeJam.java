@@ -27,7 +27,7 @@ public class CodeJam {
 
    public static void main(String[] args) throws IOException {
    // inFile and outFile
-      CodeJam cj = new CodeJam("D-small-practice-1.in", "D-small-practice-2.out");
+      CodeJam cj = new CodeJam("D-small-practice-2.in", "D-small-practice-2.out");
    
       cj.solve();
       //cj.output();
@@ -35,6 +35,24 @@ public class CodeJam {
       cj.bw.flush();
       cj.bw.close();
    }
+   
+
+
+	public static StringBuilder permutation(StringBuilder sb) { 
+			Random rn = new Random();
+			int pos = rn.nextInt(26);
+			int pos2 =  rn.nextInt(26);
+			while(pos2==pos){	
+				pos2 =  rn.nextInt(26);
+			}
+			String one = sb.charAt(pos)+"";	
+			String two = sb.charAt(pos2)+"";
+			sb = sb.replace(pos, pos+1,two );
+			sb = sb.replace(pos2, pos2+1,one );
+			return sb;
+	}
+
+	
 
    private void solve() throws FileNotFoundException {
       try {
@@ -47,17 +65,45 @@ public class CodeJam {
       
       // read in each case  **some cases have more than one line
          for (int i = 0; i < cases; i++){
-            String[] s = br.readLine().split(" ");
-            int C = Integer.parseInt(s[0]);
-            int V = Integer.parseInt(s[1]);
-            int L = Integer.parseInt(s[2]);
+			 System.out.println("Case #" + (i + 1));
+			 StringBuilder sb = new StringBuilder("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+			 String s = "";
+            int N = Integer.parseInt(br.readLine());
+            String[] arr = br.readLine().split(" ");
+            boolean impossible = false;
+            for(int j = 0; j< N; j++){
+				s = arr[j];
+				if(s.length()==1){
+					sb=new StringBuilder("IMPOSSIBLE");
+					impossible = true;
+					break;
+				}
+				
+			}
+			boolean permute = !impossible;
+		
+			while(permute){
+				permute = false;
+				
+				for(int j = 0; j< N; j++){
+					s = arr[j];
+					if(sb.indexOf(s)>=0){
+						permute = true;
+						break;
+					}	
+					
+				}
+				if(permute)
+					sb = permutation(sb);
+			
+			}
             
-            long result  = countValid(C, V, L);//magic
-            StringBuilder sb = new StringBuilder();
-            sb.append("Case #" + (i + 1) + ": "+result);
+           
+			StringBuilder res = new StringBuilder();
+            res.append("Case #" + (i + 1) + ": "+sb.toString());
                        
             try {
-               bw.write(sb.toString());
+               bw.write(res.toString());
                bw.newLine();
             } 
             catch (IOException e) {
@@ -77,22 +123,7 @@ public class CodeJam {
       }
    }
    
-   public long countValid(int C, int V, int L){
-      long prev = 1;
-      long curr = V;
-      long temp = 0;
-      for(int i = 1; i<L; i++){
-         temp = V*(C*prev + curr);
-         temp %= 1000000007;
-         prev = curr;
-         curr = temp;
-         
-         
-      }
-      return curr;
-   }
- 
-   
+
    private void output() {
    // ~edit this method for proper output
    // ~temp is just a placeholder for solution output
