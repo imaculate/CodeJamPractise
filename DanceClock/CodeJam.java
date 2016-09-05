@@ -62,40 +62,20 @@ public class CodeJam {
                K+=D;
             //System.out.println(K);
             
-            if(N%2==0){
-               if(K%2==0){//se odd formulr
-                  dr = (K+1-N)%D;
-                  dl = (K-1-N)%D;
-               }else{
-                  dr = (K+1+N)%D;
-                  dl = (K-1+N)%D;
-                  
-               }
-                while(dl<=0)   
-                     dl+= D;
-                while(dr<=0)
-                  dr+= D;
-               
-
-
+            if((N+K)%2==0){
+          
+                  dr = K+1-N;
+                  dl = K-1-N;
             }else{
-               if(K%2==0){//se even formulr
                   dr = (K+1+N)%D;
                   dl = (K-1+N)%D;
-               }else{
-                  dr = (K+1-N)%D;
-                  dl = (K-1-N)%D;
                   
-               }
-                while(dl<=0)   
-                     dl+= D;
-                while(dr<=0)
-                  dr+= D;
-
-            
-             }
-            
-            
+            }
+            while(dl<=0)
+               dl+=D;
+            while(dr<=0)
+               dr+=D;
+      
             StringBuilder sb = new StringBuilder();
             sb.append("Case #" + (i + 1) + ": "+ dr+ " "+dl);
                        
