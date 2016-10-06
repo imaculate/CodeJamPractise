@@ -18,7 +18,7 @@ public class CodeJam {
    private File inFile;
    private File outFile;
    private int cases;
-  
+   int[] digits;
 
    public CodeJam(String inFile, String outFile) {
       this.inFile = new File(inFile);
@@ -27,7 +27,7 @@ public class CodeJam {
 
    public static void main(String[] args) throws IOException {
    // inFile and outFile
-      CodeJam cj = new CodeJam("A-small-practice.in", "A-small-practice.out");
+      CodeJam cj = new CodeJam("C-large-practice.in", "C-large-practice.out");
    
       cj.solve();
       //cj.output();
@@ -40,25 +40,59 @@ public class CodeJam {
       try {
          br = new BufferedReader(new FileReader(inFile));
          bw = new BufferedWriter(new FileWriter(outFile));
+        
       
       // solve problem
       // get total number of cases from the first line
          cases = Integer.parseInt(br.readLine());
          int B = 0;
-         String s = "";
-         StringBuilder result;
+         prepareTable();
+         System.out.println(digits[9000]);
+         int t;
+         String result = "";
          
       // read in each case  **some cases have more than one line
          for (int i = 0; i < cases; i++){
-                  
-            B = Integer.parseInt(br.readLine());
-            s = br.readLine();
-            result = new StringBuilder();
-            for(int j = 0; j<B; j++){
-               String bite = s.substring(j*8 , (j+1)*8);
-               result.append(tochar(bite));
+           
+            
+            t = Integer.parseInt(br.readLine());
+            //binary search
+            int hi = 9000;
+            int lo = 1;
+            int mid=0;
+           //edge cases
+            if(t>digits[9000]){
+               /*while(lo<hi){
+                  mid = (hi+lo)/2;
+                  if(digits[mid]> t ){
+                     lo=mid+1;
+                  }
+                  else{
+                     hi = mid -1;
+                  }
+               
+               }*/
+               for(int n = 1; n<=9000; n++){
+                  if(digits[n]<t){  
+                     
+                        mid = n;
+                        break;
+                      
+                  }
+                     
+               }
+               System.out.println(mid);
+               StringBuilder res = new StringBuilder("IT'S OVER 9000");
+               for(int n=0; n< mid; n++){
+                  res.append("!");
+               }
+               result = res.toString();
             }
-            int m = i+1;
+            else{
+               result = "...";
+               
+            }
+            int m = i+1;    
             String res = "Case #"+m+ ": "+result.toString();
             try {
                bw.write(res);
@@ -78,16 +112,15 @@ public class CodeJam {
    }
    
    
-   private char tochar(String bite){
-      int f = 0;
-      for(int i =0;i< 8; i++){
-         f<<=1;
-         if(bite.charAt(i)=='I')
-            f+= 1;
-        
+   private void prepareTable(){
+      digits = new int[9001];
+      for(int i = 1; i<=9000;i++){
+         double num_digits = 0;
+         for(int j = 9000; j>0; j-=i){
+            num_digits += Math.log10(j);
+         }
+         digits[i] = (int)Math.ceil(num_digits);
       }
-      //System.out.println(f);
-      return (char)f;
    }
    
    private void output() {
