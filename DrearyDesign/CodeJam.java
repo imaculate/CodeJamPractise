@@ -18,7 +18,7 @@ public class CodeJam {
    private File inFile;
    private File outFile;
    private int cases;
-   long[][] table = new long[26][26];
+   int[] digits;
 
    public CodeJam(String inFile, String outFile) {
       this.inFile = new File(inFile);
@@ -27,7 +27,7 @@ public class CodeJam {
 
    public static void main(String[] args) throws IOException {
    // inFile and outFile
-      CodeJam cj = new CodeJam("D-small-practice.in", "D-small-practice.out");
+      CodeJam cj = new CodeJam("B-large-practice-2.in", "B-large-practice-2.out");
    
       cj.solve();
       //cj.output();
@@ -40,28 +40,22 @@ public class CodeJam {
       try {
          br = new BufferedReader(new FileReader(inFile));
          bw = new BufferedWriter(new FileWriter(outFile));
-         prepareTable();
         
       
       // solve problem
       // get total number of cases from the first line
          cases = Integer.parseInt(br.readLine());
-        
+          String result = "";
          
       // read in each case  **some cases have more than one line
          for (int i = 1; i <= cases; i++){
-           String[] arr = br.readLine().split(" ");
-           int R = Integer.parseInt(arr[0]);
-           int C = Integer.parseInt(arr[1]);
-           long ans = -1;
-           if(table[R][C]!=-1){
-            ans = table[R][C];
-           }else{
-            ans = solve(R,C);
-           }
-           
-           String res = "Case #"+i+ ": "+ ans;
-           try {
+    
+             String[] arr = br.readLine().split(" ");  
+             int K = Integer.parseInt(arr[0]);
+             int V = Integer.parseInt(arr[1]);
+             long ans = solve(K,V);
+            String res = "Case #"+i+ ": "+ans;
+            try {
                bw.write(res);
                bw.newLine();
             } 
@@ -78,32 +72,27 @@ public class CodeJam {
       }
    }
    
-   private void prepareTable(){
-      for(int i=0;i<26; i++){
-         for(int j=0; j<26; j++){
-            table[i][j]=-1;
+   private long solve(int K, int V){
+      long total = 0;
+      for(int r = 0; r<=V; r++){
+         long subtotal=0;
+         for(int g = Math.max(0, r-V); g<=Math.min(K, r+V); g++){
+            int minb = Math.max(Math.max(r-V, g-V),0);
+            int maxb = Math.min(Math.min(r+V,g+V), K);
+            subtotal+= maxb-minb+1;
+            
+         }
+         if(r==V){
+            total*= 2;
+            total+= subtotal*(K-2*V +1);
+            
+         }else{
+            total+= subtotal;
          }
       }
-            
+      return total;
    }
-     
-   private long solve(int r, int c){
-      if(r==1 || c==1){
-            table[r][c]=1;
-       } 
-       if(table[r][c]==-1){
-           long ans = 0;
-           for(int i = 1; i<=r; i++){
-               ans+= solve(c-1, i);
-           }
-		     table[r][c] = ans;
-        }
-        return table[r][c];
-   
-   }
-      
 
-	
    
    private void output() {
    // ~edit this method for proper output
